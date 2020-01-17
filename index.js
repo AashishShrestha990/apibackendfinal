@@ -38,6 +38,28 @@ application.put('/v1/users/:uid',control.updateProfile,function(req, res) {
 
 });
 
+application.get('/v1/users/:id',control.getMyProfile,function(req,res){
+    console.log(req.params.id);
+    res.status(201);
+    //message after successfully post
+    res.send({"message": "profile displayed"});
+
+});
+
+application.put('/v1/users/:uid',control.updateProfile,function(req, res) {
+    console.log(req.params.id);
+
+});
+
+application.post("/v1/project",projectController.addProject,function (req,res,next) {
+    res.status(201);
+    res.send({
+        "message": "project created"
+    })
+
+});
+
+
 
 
 application.listen(3000);

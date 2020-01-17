@@ -84,6 +84,17 @@ next();
 
 function getUser(req,res,next){
 
+    // usermodel.User.findAll({
+    //
+    //     attributes:['id','uname','email','FirstName','LastName',
+    //         'country','address','state','city','postalcode','phoneNumber']
+    // })
+    //     .then(function (result){
+    //         res.json(result);
+    //     })
+    //     .catch(function (err){
+    //
+    //     })
 
     usermodel.User.findAll({
         where :{email:req.params.email}
@@ -118,6 +129,34 @@ function getMyProfile(req,res){
 }
 
 
+
+function updateProfile(req,res){
+    usermodel.User.update({
+        uname:req.body.uname,
+        email:req.body.email,
+        FirstName:req.body.FirstName,
+        LastName:req.body.LastName,
+        country:req.body.country,
+        address:req.body.address,
+        state:req.body.state,
+        city:req.body.city,
+        postalcode:req.body.postalcode,
+        phoneNumber:req.body.phoneNumber,
+
+    }, {
+        where: {
+            id: req.params.uid
+        }
+    })
+        .then(function (result) {
+            res.status(201);
+            res.send({
+                "message": "Profile Updated"
+            })
+        })
+        .catch(function (err) {
+
+        })
 }
 
 
