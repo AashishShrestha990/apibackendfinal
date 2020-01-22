@@ -1,6 +1,23 @@
 const ProjectModel =require('../models/ProjectModel');
 const Joi = require('joi');
 //
+// function validation(req,res,next){
+//     const schema = {
+//         Pname:Joi.string().max(15).required(),
+//         Pdesc:Joi.string().required(),
+//         Pstatus:Joi.string().max(100)required(),
+//
+//     };
+//
+//     const result = Joi.validate(req.body,schema);
+//     // console.log(result);
+//     if(result.error){
+//         //bad request
+//         res.status(400).send(result.error.details[0].message);
+//         return;
+//     }
+//     next()
+// }
 
 function addProject(req,res,next){
     ProjectModel.Project.create(
@@ -64,6 +81,52 @@ function getIndividualProject(req,res){
             res.json(err);
         })
 }
+
+
+function updateProject(req,res){
+    ProjectModel.Project.update({
+        Pname:req.body.Pname,
+        Pdesc:req.body.Pdesc,
+        Pstatus:req.body.Pstatus,
+
+
+    }, {
+        where: {
+            id: req.params.id
+        }
+    })
+        .then(function (result) {
+            res.status(201);
+            res.send({
+                "message": "Project Updated"
+            })
+        })
+        .catch(function (err) {
+
+        })
+}
+
+
+
+function deleteProject(req,res,next){
+    ProjectModel.Project.destroy({
+        where:{id:req.params.id}
+    })
+        .then(function(){
+            res.status(200);
+            res.send({
+                "message":"Project deleted"
+            })
+
+        })
+        .catch(function (err) {
+            next({"status":500,"message":"could not deleted"})
+        });
+    next()
+}
+
+
+
 
 
 
