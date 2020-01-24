@@ -59,6 +59,30 @@ application.post("/v1/project",projectController.addProject,function (req,res,ne
 
 });
 
+application.get("/v1/project/:UserId",projectController.getProject,function(req,res,next){
+
+});
+
+application.delete("/v1/project/:id",projectController.deleteProject,function(req,res,next){
+    // console.log(req.params.id);
+    res.status(201);
+    //message after successfully post
+    res.send({"message": "project deleted"});
+    next();
+});
+
+application.get('/v1/sproject/:id',projectController.getIndividualProject,function(req,res){
+    console.log(req.params.id);
+    res.status(201);
+    //message after successfully post
+    res.send({"message": "project displayed"});
+
+});
+
+application.put('/v1/project/:id',projectController.updateProject ,function(req, res) {
+    console.log(req.params.id);
+
+});
 
 
 
