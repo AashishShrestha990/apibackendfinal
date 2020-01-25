@@ -75,6 +75,63 @@ function getNote(req, res, next) {
 
 
 
+//delete note
+function deleteNote(req, res, next) {
+    NoteModel.Note.destroy({
+        where: { id: req.params.id }
+    })
+        .then(function () {
+            res.status(200);
+            res.send({
+                "message": "deleted successfully"
+            })
+
+        })
+        .catch(function (err) {
+            next({ "status": 500, "message": "Not deleted" })
+        });
+    next()
+}
+
+
+
+
+
+function getSeperateNote(req,res){
+    NoteModel.Note.findOne({
+        where:{id:req.params.id}
+    })
+        .then(function (result) {
+            res.status(200);
+            res.json(result);
+
+        })
+        .catch(function(err){
+            res.json(err);
+        })
+}
+
+
+function updateNote(req,res){
+    NoteModel.Note.update({
+        Nname:req.body.Nname,
+        Ndesc:req.body.Ndesc,
+
+    }, {
+        where: {
+            id: req.params.id
+        }
+    })
+        .then(function (result) {
+            res.status(201);
+            res.send({
+                "message": "Note Updated"
+            })
+        })
+        .catch(function (err) {
+
+        })
+}
 
 
 module.exports ={
