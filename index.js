@@ -2,10 +2,26 @@ console.log('Running');
 
 const bcrypt = require('bcrypt');
 var control = require("./controllers/UserController");
+var projectController = require("./controllers/ProjectController");
+const noteController = require('./controllers/NoteController');
 var express = require('express');
 var bodyParser = require('body-parser');
 var application = new express;
+var multer = require('multer');
+var path = require('path');
+var Auth = require("./controllers/AuthController");
 
+
+application.use(bodyParser.json());
+application.use(bodyParser.urlencoded({ extended: true }));
+// program.use('/upload',express.static(path.join(__dirname, 'upload')));
+var publicDir = require('path').join(__filename,'/upload');
+application.use(express.static(publicDir));
+
+application.use(express.static('public'));
+
+//Serves all the request which includes /images in the url from Images folder
+application.use('/upload', express.static(__dirname + '/upload'));
 
 
 
@@ -83,6 +99,40 @@ application.put('/v1/project/:id',projectController.updateProject ,function(req,
     console.log(req.params.id);
 
 });
+
+application.post('/v1/upload',upload.single("Nimage"), noteController.addNote,function (req, res)  {
+console.log(req.body);
+
+    // res.statusCode = 200;
+    // res.setHeader('Content-Type', 'application/json');
+    // res.json(req.file);
+    // res.status(200);
+    console.log("Note added")
+ });
+
+// application.use(function(err,req,res,next){
+//     res.status(err.status);
+//     res.send({"message":err.message});
+// });
+
+
+application.get("/v1/note/:UserId",noteController.getNote,
+    function(req,res,next){
+    });
+
+application.get('/v1/snote/:id',noteController.getSeperateNote,function(req,res){
+    console.log(req.params.id);
+    res.status(201);
+    //message after successful
+    res.send({"message": "pulled note"});
+
+});
+
+application.put('/v1/note/:id',noteController.updateNote,function(req, res) {
+    console.log(req.params.id);
+});
+
+
 
 
 
