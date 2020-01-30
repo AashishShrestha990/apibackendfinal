@@ -23,6 +23,32 @@ application.use(express.static('public'));
 //Serves all the request which includes /images in the url from Images folder
 application.use('/upload', express.static(__dirname + '/upload'));
 
+application.use(function(req,res,next){
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Methods','GET,POST,OPTIONS,PUT,PATCH,DELETE');
+    res.setHeader('Access-Control-Allow-Headers','X-Requested-With, content-type');
+    next();
+});
+
+
+
+var mystorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'upload')
+    },
+    filename: (req, file, cb) => {
+        cb(null,file.originalname + '-' + Date.now() +
+            path.extname(file.originalname));
+    }
+});
+
+var imageFileFilter = (req, file, cb) => {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        return cb(new Error('You can upload only image files!'), false);
+    }
+    cb(null, true);
+};
+var upload = multer({storage:mystorage});
 
 
 application.post("/v1/users/",control.validator,control.hashGenerator, control.registerUser, function (req,res,next) {
